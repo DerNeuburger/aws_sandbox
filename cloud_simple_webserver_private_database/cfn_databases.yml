@@ -1,0 +1,66 @@
+Description: >
+    Nicolas Neuburger / Udacity Nanodegree Cloud DevOps Engineer
+
+Parameters:
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resou
+        Type: String
+        Default: UdacityProject
+    DBAllocatedStorage:
+        Description: An environment name that will be prefixed to resou
+        Type: String
+        Default: 100
+    DBUser:
+        Description: An environment name that will be prefixed to resou
+        Type: String
+    DBPassword:
+        Description: An environment name that will be prefixed to resou
+        Type: String
+
+Resources:
+    DatabaseSecGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: Allow SQL requests via HTTP
+            VpcId:
+                Fn::ImportValue:
+                    !Sub "${EnvironmentName}-VPCID"
+            SecurityGroupIngress:
+                - IpProtocol: tcp
+                  FromPort: 3306
+                  ToPort: 3306
+                  CidrIp: 0.0.0.0/0
+                - IpProtocol: tcp
+                  FromPort: 22
+                  ToPort: 22
+                  CidrIp: 0.0.0.0/0
+            SecurityGroupEgress:
+                - IpProtocol: tcp
+                  FromPort: 0
+                  ToPort: 65535
+                  CidrIp: 0.0.0.0/0
+
+    DBSubnetGroup:
+        Type: AWS::RDS::DBSubnetGroup
+        Properties:
+            DBSubnetGroupDescription: SubnetGroup for the MySQL Database
+            SubnetIds:
+              Fn::Split:
+                - ","
+                - Fn::ImportValue:
+                      Fn::Sub: ${EnvironmentName}-PRIV-NETS
+    MySQLDatabase:
+        Type: AWS::RDS::DBInstance
+        DeletionPolicy: Retain
+        Properties:
+            DBSubnetGroupName: !Ref DBSubnetGroup
+            AllocatedStorage: !Ref DBAllocatedStorage
+            MultiAZ: True
+            DBInstanceClass: db.t2.micro
+            VPCSecurityGroups:
+              - !Ref DatabaseSecGroup
+            Engine: MySQL
+            MasterUserPassword:
+              Ref: DBPassword # Only included in Param File, because it is a test scenario
+            MasterUsername:
+              Ref: DBUser # Only included in Param File, because it is a test scenario

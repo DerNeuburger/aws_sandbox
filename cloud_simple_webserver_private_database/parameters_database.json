@@ -1,0 +1,16 @@
+
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "UdacityProject"
+  },{
+    "ParameterKey": "DBAllocatedStorage",
+    "ParameterValue": "24"
+  },{
+    "ParameterKey": "DBPassword",
+    "ParameterValue": "password"
+  },{
+    "ParameterKey": "DBUser",
+    "ParameterValue": "user"
+  }
+]
