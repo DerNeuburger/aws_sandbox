@@ -7,6 +7,7 @@
 
 # Declare Variables
 COMMAND="create-stack"
+IAM_CAPABILITIES=""
 
 # User Feedback in case of wrong usage
 
@@ -34,6 +35,9 @@ while [[ $1 = -* ]]; do
         -u | --update)
             COMMAND="update-stack"
             ;;
+        -c | --iam_capabilities)
+            IAM_CAPABILITIES="--capabilities CAPABILITY_NAMED_IAM"
+            ;;
         *)
             echo "Error unknown parameter \"$PARAM\""
             usage
@@ -44,4 +48,5 @@ while [[ $1 = -* ]]; do
     shift
 done
 
-aws cloudformation $COMMAND --stack-name $1 --template-body file://$2 --parameters file://$3 --region eu-central-1
+aws cloudformation $COMMAND --stack-name $1 --template-body file://$2 --parameters file://$3 --region eu-central-1 $IAM_CAPABILITIES
+
