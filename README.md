@@ -2,6 +2,26 @@
 
 A collection of exemplary code using Amazon Web Services which were mostly created learning the usage of AWS Services. All examples were created using the second version of the AWS client on linux. Steps, required to install it, are shown [here](https://docs.aws.amazon.com/de_de/cli/latest/userguide/install-cliv2.html).
 
+## VPN Connection to the Virtual Private Cloud
+
+In this example a cloud architecture is described using AWS CloudFormation. AWS EC2 server instances are created using EC2 Auto-Scaling. The source code of the web application is taken from an AWS S3 bucket hosted by the online academy Udacity. User requests to the web application are forwarded using an Application Load Balancer. The load balancer is located in a public subnet and is permitted to forward the traffic via NAT gateway to a private subnet where the web server resides. In order to allow maintenance bastion hosts are generated in the public subnets which allow inbound SSH traffic from a specific developer IP address and have the permission to SSH into the web servers.dFormation. It
+
+![Schematics of the Cloud Architecture](cloud_webapp_hosting_with_bastion_hosts/cloud_architecture.png)
+
+In order to create this architecture, run the following command:
+
+```
+cd <path-to-repository>/cloud_webapp_hosting_with_bastion_hosts/
+```
+
+In the following the CloudFormation stacks with an arbitrary stack-name are created. Run the commands one by one, ensuring the stacks have been created successfully.
+It is important to note, that the -c flag for the permission files adds IAM capabilities to the create-stack command, necessary to create an IAM Role and map it to an IAM Instance Profile.
+```
+../manage_stack.sh test-network-1 cfn_network.yml parameters_network.json
+../manage_stack.sh -c test-webservers-1 cfn_permissions.yml parameters_permissions.json
+../manage_stack.sh test-database-1 cfn_webservers.yml parameters_webservers.json
+```
+
 ## Simple Server with private database
 
 This example consists of a cloud architecture designed with AWS CloudFormation. It is built around a webserver that servers a customer with a simple HTTP content. The webserver is scaled horizontally by spinning up/down virtual webserver instances depending on the requesting demand.The request load is well balanced over all webserver instances using a load balancer which forwards traffic via a public subnet to corresponding private subnets containing the "backend". The backend also contains a MySQL database which can later serve for more features of the webserver
