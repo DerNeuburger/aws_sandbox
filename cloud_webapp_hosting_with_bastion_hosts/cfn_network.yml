@@ -222,6 +222,11 @@ Outputs:
         Value: !Ref S3DomainName
         Export:
             Name: !Sub ${EnvironmentName}-S3DomainName
+    VPCCIDR:
+        Description: CIDR Block of the VPCCIDR
+        Value: !Ref VPCCIDR
+        Export:
+            Name: !Sub ${EnvironmentName}-VPCCIDR
     VPCPublicRouteTable:
         Description: Public Routing
         Value: !Ref PublicRouteTable

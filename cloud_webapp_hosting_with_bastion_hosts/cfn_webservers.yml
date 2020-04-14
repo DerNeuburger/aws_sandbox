@@ -12,9 +12,6 @@ Parameters:
       Description: An environment name that will be prefixed to resou
       Type: String
       Default: UdacityProject
-  MyCidrIpAddress:
-      Description: Specific IP Address that gets access to the bastion hosts
-      Type: String
 
 Resources:
     LoadBalancerSecGroup:
@@ -49,30 +46,15 @@ Resources:
                 - IpProtocol: tcp
                   FromPort: 22
                   ToPort: 22
-                  CidrIp: 0.0.0.0/0
+                  CidrIp:
+                      Fn::ImportValue:
+                          !Sub "${EnvironmentName}-VPCCIDR"
             SecurityGroupEgress:
                 - IpProtocol: tcp
                   FromPort: 0
                   ToPort: 65535
                   CidrIp: 0.0.0.0/0
 
-    BastionSecGroup:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-            GroupDescription: Allow http to our hosts and SSH from local only
-            VpcId:
-                Fn::ImportValue:
-                    !Sub "${EnvironmentName}-VPCID"
-            SecurityGroupIngress:
-                - IpProtocol: tcp
-                  FromPort: 22
-                  ToPort: 22
-                  CidrIp: !Ref "MyCidrIpAddress"
-            SecurityGroupEgress:
-                - IpProtocol: tcp
-                  FromPort: 0
-                  ToPort: 65535
-                  CidrIp: 0.0.0.0/0
 
     WebAppLaunchConfig:
         Type: AWS::AutoScaling::LaunchConfiguration
@@ -160,36 +142,6 @@ Resources:
             Fn::ImportValue:
               Fn::Sub: "${EnvironmentName}-VPCID"
 
-    BastionHostLaunchConfig:
-        Type: AWS::AutoScaling::LaunchConfiguration
-        Properties:
-          UserData:
-            Fn::Base64: !Sub |
-              #!/bin/bash
-              apt-get update -y
-              apt-get install unzip awscli -y
-              systemctl service start sshd
-
-          ImageId: ami-0b418580298265d5c # Ubuntu 18.04 (HVM) 64-bit x86 - Free Tier
-          IamInstanceProfile:
-              Fn::ImportValue:
-                  Fn::Sub: "${EnvironmentName}-IAM-INST-APP-ARN"
-          SecurityGroups:
-          - Ref: BastionSecGroup
-          InstanceType: t2.medium
-          KeyName: "project_2_bastion_hosts"
-
-    BastionHostAutoScalingGroup:
-        Type: AWS::AutoScaling::AutoScalingGroup
-        Properties:
-            VPCZoneIdentifier:
-              Fn::Split:
-                - ","
-                - Fn::ImportValue:
-                      Fn::Sub: ${EnvironmentName}-PUB-NETS
-            LaunchConfigurationName: !Ref BastionHostLaunchConfig
-            MinSize: '2'
-            MaxSize: '2'
 
 Outputs:
     DNSWebAppLB:
