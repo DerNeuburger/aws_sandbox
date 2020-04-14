@@ -19,23 +19,12 @@ Resources:
       Type: AWS::IAM::Role
       Properties:
           RoleName: !Join ["", [!Sub "${AWS::Region}", "UdacityS3ReadOnlyEC2"]]
-          #AssumeRolePolicyDocument:
-          #    Statement:
-          #      - Effect: Allow
-          #        Principal:
-          #            Service:
-          #                - s3.amazonaws.com
-          #        Action:
-          #          - "s3:List*"
-          #          - "s3:GetBucketLocation"
-          #          - "s3:GetBucketPolicy"
-          #          - "s3:GetLifecycleConfiguration"
           AssumeRolePolicyDocument:
               Statement:
               - Action: ['sts:AssumeRole']
                 Effect: Allow
                 Principal:
-                    Service: [s3.amazonaws.com]
+                    Service: [ec2.amazonaws.com]
           Policies:
               - PolicyName: "S3ReadOnly"
                 PolicyDocument:
