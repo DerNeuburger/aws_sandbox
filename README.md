@@ -18,9 +18,10 @@ cd <path-to-repository>/cloud_webapp_hosting_with_bastion_hosts/
 In the following the CloudFormation stacks with an arbitrary stack-name are created. Run the commands one by one, ensuring the stacks have been created successfully.
 It is important to note, that the -c flag for the permission files adds IAM capabilities to the create-stack command, necessary to create an IAM Role and map it to an IAM Instance Profile.
 ```
-../manage_stack.sh test-network-1 cfn_network.yml parameters_network.json
-../manage_stack.sh -c test-webservers-1 cfn_permissions.yml parameters_permissions.json
-../manage_stack.sh test-database-1 cfn_webservers.yml parameters_webservers.json
+../manage_stack.sh test-network cfn_network.yml parameters_network.json
+../manage_stack.sh -c test-permissions cfn_permissions.yml parameters_permissions.json
+../manage_stack.sh test-webservers cfn_webservers.yml parameters_webservers.json
+../manage_stack.sh test-bastion-hosts cfn_bastion_hosts.yml parameters_bastion_hosts.json
 ```
 
 ## Simple Server with private database
