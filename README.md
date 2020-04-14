@@ -2,7 +2,7 @@
 
 A collection of exemplary code using Amazon Web Services which were mostly created learning the usage of AWS Services. All examples were created using the second version of the AWS client on linux. Steps, required to install it, are shown [here](https://docs.aws.amazon.com/de_de/cli/latest/userguide/install-cliv2.html).
 
-## VPN Connection to the Virtual Private Cloud
+## High available WebApp from External Resource with Bastion Host Access
 
 In this example a cloud architecture is described using AWS CloudFormation. AWS EC2 server instances are created using EC2 Auto-Scaling. The source code of the web application is taken from an AWS S3 bucket hosted by the online academy Udacity to which the webservers have access to using a custom created AWS IAM role. User requests to the web application are forwarded using an Application Load Balancer. The load balancer is located in a public subnet and is permitted to forward the traffic to the private subnets where the web server reside. For outgoing traffic to the Internet the web servers are connected to a NAT gateway.
 In order to allow maintenance a bastion host is generated in one of the public subnets which allows inbound SSH traffic from a specific developer IP address and has the permission to SSH into the web servers.
