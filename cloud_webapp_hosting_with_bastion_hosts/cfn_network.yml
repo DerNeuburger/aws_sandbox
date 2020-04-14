@@ -32,9 +32,6 @@ Parameters:
         Description: CIDR-Block of the second public subnet
         Type: String
         Default: 10.0.4.0/24
-    S3DomainName:
-        Description: Domain Name of the S3 Bucket
-        Type: String
 Resources:
     VPC:
         Type: AWS::EC2::VPC
@@ -198,13 +195,6 @@ Resources:
     VPCEndpointS3Bucket:
         Type: AWS::EC2::VPCEndpoint
         Properties:
-            #PolicyDocument:
-            #    Statement:
-            #    - Effect: Allow
-            #      Action:
-            #        - 's3:GetObject'
-            #      Resource:
-            #        - !Join ["", ['arn:aws:s3:::', !Ref S3DomainName,'/']]
             RouteTableIds:
               - !Ref PublicRouteTable
             ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
@@ -217,14 +207,9 @@ Outputs:
         Value: !Ref VPC
         Export:
           Name: !Sub ${EnvironmentName}-VPCID
-    S3DomainName:
-        Description: Domain Name of the S3 Bucket
-        Value: !Ref S3DomainName
-        Export:
-            Name: !Sub ${EnvironmentName}-S3DomainName
     VPCCIDR:
         Description: CIDR Block of the VPCCIDR
-        Value: !Ref VPCCIDR
+        Value: !Ref VpcCIDR
         Export:
             Name: !Sub ${EnvironmentName}-VPCCIDR
     VPCPublicRouteTable:

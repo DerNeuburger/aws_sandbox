@@ -17,8 +17,5 @@
   },{
     "ParameterKey": "PublicSubnet2CIDR",
     "ParameterValue": "10.0.4.0/24"
-  },{
-    "ParameterKey": "S3DomainName",
-    "ParameterValue": "udacity-demo-1"
   }
 ]
