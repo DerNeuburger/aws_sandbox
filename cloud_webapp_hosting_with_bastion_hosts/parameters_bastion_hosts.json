@@ -5,5 +5,8 @@
   },{
     "ParameterKey": "MyCidrIpAddress",
     "ParameterValue": "79.224.204.159/0"
+  },{
+      "ParameterKey": "KeyNameSsh",
+      "ParameterValue": "project_2_bastion_hosts"
   }
 ]

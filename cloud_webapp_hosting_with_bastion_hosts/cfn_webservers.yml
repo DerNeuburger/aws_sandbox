@@ -12,6 +12,13 @@ Parameters:
       Description: An environment name that will be prefixed to resou
       Type: String
       Default: UdacityProject
+  KeyNameSsh:
+      Description: Name of Key Value Pair for SSHing into bastion hosts
+      Type: String
+  MaxNumberInstancesScaling:
+      Description: Maximum number of instances that can be deployed by the autoscaling group
+      Type: String
+      Default: 4
 
 Resources:
     LoadBalancerSecGroup:
@@ -77,7 +84,7 @@ Resources:
           SecurityGroups:
           - Ref: WebServerSecGroup
           InstanceType: t2.medium
-          KeyName: "project_2_webapp_hosts"
+          KeyName: !Ref KeyNameSsh
           BlockDeviceMappings:
           - DeviceName: "/dev/sdk"
             Ebs:
@@ -93,7 +100,7 @@ Resources:
                       Fn::Sub: ${EnvironmentName}-PRIV-NETS
             LaunchConfigurationName: !Ref WebAppLaunchConfig
             MinSize: '2'
-            MaxSize: '4'
+            MaxSize: !Ref MaxNumberInstancesScaling
             TargetGroupARNs:
                 - Ref: WebAppTargetGroup
 
@@ -133,6 +140,7 @@ Resources:
           HealthCheckIntervalSeconds: 35
           HealthCheckPath: /
           HealthCheckProtocol: HTTP
+          HealthCheckPort: 80
           HealthCheckTimeoutSeconds: 30
           HealthyThresholdCount: 2
           Port: 80
