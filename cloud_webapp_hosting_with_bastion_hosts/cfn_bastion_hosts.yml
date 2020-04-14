@@ -37,8 +37,9 @@ Resources:
                   ToPort: 65535
                   CidrIp: 0.0.0.0/0
     BastionHostLaunchConfig:
-        Type: AWS::AutoScaling::LaunchConfiguration
+        Type: AWS::EC2::Instance
         Properties:
+          AvailabilityZone: !Select [ 0, !GetAZs '' ]
           UserData:
             Fn::Base64: !Sub |
               #!/bin/bash
@@ -54,15 +55,3 @@ Resources:
           - Ref: BastionSecGroup
           InstanceType: t2.micro
           KeyName: !Ref KeyNameSsh
-
-    BastionHostAutoScalingGroup:
-        Type: AWS::AutoScaling::AutoScalingGroup
-        Properties:
-            VPCZoneIdentifier:
-              Fn::Split:
-                - ","
-                - Fn::ImportValue:
-                      Fn::Sub: ${EnvironmentName}-PUB-NETS
-            LaunchConfigurationName: !Ref BastionHostLaunchConfig
-            MinSize: '2'
-            MaxSize: '2'
