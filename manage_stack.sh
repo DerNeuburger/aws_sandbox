@@ -1,13 +1,16 @@
 #!/bin/bash
 
+set -e
 
 # Description: Script to create or update AWS CloudFormation Stacks
 # Author: Nicolas Neuburger
 # Last Updated: 06th of April 2020
 
 # Declare Variables
-COMMAND="create-stack"
+STACK_COMMAND="create-stack"
+WAIT_COMMAND="stack-create-complete"
 IAM_CAPABILITIES=""
+WAIT_CREATE_COMPLETED=false
 
 # User Feedback in case of wrong usage
 
@@ -33,20 +36,26 @@ while [[ $1 = -* ]]; do
             exit
             ;;
         -u | --update)
-            COMMAND="update-stack"
+            STACK_COMMAND="update-stack"
+            WAIT_COMMAND="stack-update-complete"
             ;;
         -c | --iam_capabilities)
             IAM_CAPABILITIES="--capabilities CAPABILITY_NAMED_IAM"
+            ;;
+        -w | --wait-create-completed)
+            WAIT_CREATE_COMPLETED=true
             ;;
         *)
             echo "Error unknown parameter \"$PARAM\""
             usage
             exit 1
             ;;
-
     esac
     shift
 done
 
-aws cloudformation $COMMAND --stack-name $1 --template-body file://$2 --parameters file://$3 --region eu-central-1 $IAM_CAPABILITIES
+aws cloudformation $STACK_COMMAND --stack-name $1 --template-body file://$2 --parameters file://$3 --region eu-central-1 $IAM_CAPABILITIES
 
+if $WAIT_CREATE_COMPLETED ; then
+    aws cloudformation wait $WAIT_COMMAND --stack-name $1
+fi
