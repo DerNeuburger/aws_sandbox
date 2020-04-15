@@ -51,12 +51,12 @@ Resources:
               - !Join ["", [!Sub "${AWS::Region}", "JenkinsServerIamRole"]]
 
 Outputs:
-  JenkinsServerIamProfile:
+  JenkinsServerIamProfileName:
       Description: IAM Instance Profile defined for the WebApp to contact S3 services
       Value: !Ref JenkinsServerIamProfile
       Export:
-        Name: !Sub "${EnvironmentName}-IAM-INST-APP"
-  JenkinsServerIamProfile:
+        Name: !Sub "${EnvironmentName}-IAM-INST-APP-REF"
+  JenkinsServerIamProfileArn:
       Description: ARN of IAM Instance Profile defined for the WebApp to contact S3 services
       Value: !GetAtt "JenkinsServerIamProfile.Arn"
       Export:

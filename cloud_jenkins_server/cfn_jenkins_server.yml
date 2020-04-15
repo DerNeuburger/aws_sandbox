@@ -18,6 +18,7 @@ Resources:
         Type: AWS::EC2::SecurityGroup
         Properties:
             GroupDescription: basic Jenkins security group
+            GroupName: jenkins
             VpcId:
                 Fn::ImportValue:
                     !Sub "${EnvironmentName}-VPCID"
@@ -72,7 +73,9 @@ Resources:
               systemctl status jenkins start sshd
 
           ImageId: ami-0b418580298265d5c # Ubuntu 18.04 (HVM) 64-bit x86 - Free Tier
-          IamInstanceProfile: "JenkinsServerIamProfile"
+          IamInstanceProfile:
+              Fn::ImportValue:
+                   Fn::Sub: "${EnvironmentName}-IAM-INST-APP-REF"
           SecurityGroupIds:
           - !GetAtt JenkinsSecGroup.GroupId
           #SecurityGroups: [ "BastionSecGroup" ]
