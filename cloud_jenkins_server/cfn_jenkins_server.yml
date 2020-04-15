@@ -72,6 +72,9 @@ Resources:
               systemctl enable jenkins
               systemctl status jenkins start sshd
 
+              # Step 9 - FIX: Downgrad github-api to 1.106 (https://issues.jenkins-ci.org/browse/JENKINS-61822)
+              wget http://updates.jenkins-ci.org/download/plugins/github-api/1.106/github-api.hpi
+
           ImageId: ami-0b418580298265d5c # Ubuntu 18.04 (HVM) 64-bit x86 - Free Tier
           IamInstanceProfile:
               Fn::ImportValue:
