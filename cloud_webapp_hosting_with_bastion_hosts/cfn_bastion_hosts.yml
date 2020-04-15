@@ -36,10 +36,13 @@ Resources:
                   FromPort: 0
                   ToPort: 65535
                   CidrIp: 0.0.0.0/0
-    BastionHostLaunchConfig:
+    BastionHost:
         Type: AWS::EC2::Instance
+        DependsOn: BastionSecGroup
         Properties:
-          AvailabilityZone: !Select [ 0, !GetAZs '' ]
+          SubnetId:
+              Fn::ImportValue:
+                  !Sub "${EnvironmentName}-PUB1-NET"
           UserData:
             Fn::Base64: !Sub |
               #!/bin/bash
@@ -48,10 +51,8 @@ Resources:
               systemctl service start sshd
 
           ImageId: ami-0b418580298265d5c # Ubuntu 18.04 (HVM) 64-bit x86 - Free Tier
-          IamInstanceProfile:
-              Fn::ImportValue:
-                  Fn::Sub: "${EnvironmentName}-IAM-INST-APP-ARN"
-          SecurityGroups:
-          - Ref: BastionSecGroup
+          SecurityGroupIds:
+          - !GetAtt BastionSecGroup.GroupId
+          #SecurityGroups: [ "BastionSecGroup" ]
           InstanceType: t2.micro
           KeyName: !Ref KeyNameSsh
