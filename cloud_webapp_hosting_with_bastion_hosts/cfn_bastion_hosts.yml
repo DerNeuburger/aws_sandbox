@@ -51,4 +51,4 @@ Resources:
           SecurityGroupIds:
           - !GetAtt BastionSecGroup.GroupId
           #SecurityGroups: [ "BastionSecGroup" ]
-          InstanceType: t2.micro
+          InstanceType: t3.small

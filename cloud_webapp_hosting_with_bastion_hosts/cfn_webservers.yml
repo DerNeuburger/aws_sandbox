@@ -80,7 +80,7 @@ Resources:
                   Fn::Sub: "${EnvironmentName}-IAM-INST-APP-ARN"
           SecurityGroups:
           - Ref: WebServerSecGroup
-          InstanceType: t2.medium
+          InstanceType: t3.small
           BlockDeviceMappings:
           - DeviceName: "/dev/sdk"
             Ebs:
