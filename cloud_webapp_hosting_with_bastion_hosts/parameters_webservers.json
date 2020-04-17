@@ -3,9 +3,6 @@
     "ParameterKey": "EnvironmentName",
     "ParameterValue": "UdacityProject2"
   },{
-      "ParameterKey": "KeyNameSsh",
-      "ParameterValue": "project_2_webapp_hosts"
-  },{
       "ParameterKey": "MaxNumberInstancesScaling",
       "ParameterValue": "4"
   }

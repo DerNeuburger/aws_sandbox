@@ -12,9 +12,6 @@ Parameters:
       Description: An environment name that will be prefixed to resou
       Type: String
       Default: UdacityProject
-  KeyNameSsh:
-      Description: Name of Key Value Pair for SSHing into bastion hosts
-      Type: String
   MaxNumberInstancesScaling:
       Description: Maximum number of instances that can be deployed by the autoscaling group
       Type: String
@@ -84,7 +81,6 @@ Resources:
           SecurityGroups:
           - Ref: WebServerSecGroup
           InstanceType: t2.medium
-          KeyName: !Ref KeyNameSsh
           BlockDeviceMappings:
           - DeviceName: "/dev/sdk"
             Ebs:

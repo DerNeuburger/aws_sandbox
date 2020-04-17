@@ -15,9 +15,6 @@ Parameters:
     MyCidrIpAddress:
       Description: Specific IP Address that gets access to the bastion hosts
       Type: String
-    KeyNameSsh:
-      Description: Name of Key Value Pair for SSHing into bastion hosts
-      Type: String
 Resources:
     BastionSecGroup:
         Type: AWS::EC2::SecurityGroup
@@ -55,4 +52,3 @@ Resources:
           - !GetAtt BastionSecGroup.GroupId
           #SecurityGroups: [ "BastionSecGroup" ]
           InstanceType: t2.micro
-          KeyName: !Ref KeyNameSsh
